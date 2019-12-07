@@ -2,6 +2,7 @@
 #
 # Licence : MIT Licence
 # owner   : Fumiya Shibamata
+# web     : https://github.com/sbfm/getChromeWebDriver
 #
 import os
 import re
@@ -9,35 +10,33 @@ import zipfile
 import ConfigController
 import urllib.request
 from lxml import html
-#
-# you must pip lxml.
-#
-# *sampleCode
-# import getChromeWebDriver
-# getDriver = getChromeWebDriver.getChromeWebDriver()
-# getDriver.setTempDirectory("temp/") :
-# getDriver.upCheckChromeDriver("DrivwrPath")
-#
 
 class getChromeWebDriver :
-    # ---------------------
-    # constructor
-    # ---------------------
-    # You can set the name of the config file
-    # If you do not set, an "config.ini" will be set
-    #
-    # * argument1
-    # no set argument 
-    #
-    # * argument2
-    # [0] configFileName
-    #
-    def __init__(self,*configFileName):
+    """Auto update web driver
+    
+    you must pip lxml.
+    
+    * sampleCode
+    import getChromeWebDriver
+    getDriver = getChromeWebDriver.getChromeWebDriver()
+    getDriver.setTempDirectory("temp/") :
+    getDriver.upCheckChromeDriver("DrivwrPath")
+    """
+    
+    def __init__(self,configFileName = "config.ini"):
+        """constructor
         
-        if len(configFileName) :
-            self.configName = configFileName[0]
-        else :
-            self.configName = 'config.ini'
+        You can set the name of the config file
+        If you do not set, an "config.ini" will be set
+        
+        * argument1
+        no set argument 
+        
+        * argument2
+        [0] configFileName
+        """
+        
+        self.configName = configFileName
             
         ccini = ConfigController.ConfigController(self.configName)
         ccini.setSection("getChromeWebDriver")
@@ -81,12 +80,11 @@ class getChromeWebDriver :
         self.httpsProxy = setValue
         return 1
 
-    # ----------------------------------
-    #  check Chrome Version (for Windows) 
-    # ----------------------------------
-    # check local Chrome Browser Version
-    #
     def checkLocalChromeVersion(self) :
+        """check Chrome Version (for Windows) 
+        
+        check local Chrome Browser Version
+        """
         # get CromeApplicationFolderTree
         files = os.listdir(self.chromePath)
         # Collect directories only
@@ -104,16 +102,14 @@ class getChromeWebDriver :
         # can't get Chrome Version return 0
         return version
     
-    # ----------------------------------
-    #  check Chrome Version
-    # ----------------------------------
     def checkLocalChromeDriverVersion(self) :
+        """check Chrome Version
+        """
         return self.localChromeDVersion
     
-    # ----------------------------------
-    # get chromeDriver Address for match local chrome version
-    # ----------------------------------
     def checkLatestChromeDriverVersion(self, localChromeVersion) :
+        """get chromeDriver Address for match local chrome version
+        """
         # if 
         if self.useProxy == "true" :
             os.environ["http_proxy"] = self.httpProxy
@@ -155,10 +151,9 @@ class getChromeWebDriver :
             return 0
         return mi
         
-    # ----------------------------------
-    # check chromeDriver Version //////////////////////
-    # ----------------------------------
     def upCheckChromeDriver(self, chromeDriverDirectory) :
+        """check chromeDriver Version
+        """
         localversion = self.checkLocalChromeVersion()
         if localversion == int(self.localChromeDVersion) : 
             # ///////////////////////////////
